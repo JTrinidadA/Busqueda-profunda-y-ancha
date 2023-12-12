@@ -12,6 +12,7 @@ NEGRO = (0, 0, 0)
 AZUL = (0, 0, 255)  # Color azul
 ROJO = (255, 0, 0)  # Color rojo
 AMARILLO = (255, 255, 0)  # Color amarillo
+VERDE = (0, 255, 0)
 
 laberinto = None
 # Coordenadas iniciales y finales para BFS
@@ -39,23 +40,28 @@ def encontrar_coordenadas(laberinto):
                 global fin
                 fin = (i, j)
 
-def dibujar_laberinto(screen):
+
+def dibujar_laberinto(screen, laberinto, laberinto_copia):
     screen.fill(BLANCO)  # Llenar la pantalla con el color blanco
 
     for fila in range(len(laberinto)):
         for columna in range(len(laberinto[0])):
-            if laberinto[fila][columna] == 0:
-                pygame.draw.rect(screen, NEGRO, (columna * 40, fila * 40, 40, 40))
-            else:
+            if laberinto[fila][columna] == 1:
                 pygame.draw.rect(screen, BLANCO, (columna * 40, fila * 40, 40, 40))
-
-    # Dibujar la entrada (azul)
+            elif (laberinto[fila][columna] == 'v'):
+                pygame.draw.circle(screen, VERDE, (columna * 40+20, fila * 40+20),radius=15)
+        # Dibujar la entrada (azul)
     pygame.draw.rect(screen, AZUL, (inicio[1] * 40, inicio[0] * 40, 40, 40))
 
     # Dibujar la salida (rojo)
     pygame.draw.rect(screen, ROJO, (fin[1] * 40, fin[0] * 40, 40, 40))
 
-    # Dibujar el punto amarillo en la posición actual
+    for fila in range(len(laberinto)):
+        for columna in range(len(laberinto[0])):
+            if laberinto_copia[fila][columna] == 0:
+                pygame.draw.rect(screen, NEGRO, (columna * 40, fila * 40, 40, 40))
+
+        # Dibujar el punto amarillo en la posición actual
     pygame.draw.rect(screen, AMARILLO, (posicion_x, posicion_y, 40, 40))
 
     pygame.display.flip()
@@ -68,12 +74,13 @@ def obtener_camino_corto(parent, inicio, fin):
     path.insert(0, inicio)
     return path
 
-def bfs_laberinto(screen):
+def bfs_laberinto(screen, laberinto, laberinto_copia):
     global posicion_x, posicion_y
     visited = set()
     queue = deque([inicio])
     parent = {}
 
+    laberinto2 = laberinto
     while queue:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -86,8 +93,9 @@ def bfs_laberinto(screen):
             path = obtener_camino(parent, inicio, fin)
             for paso in path:
                 posicion_x, posicion_y = paso[1] * 40, paso[0] * 40
-                dibujar_laberinto(screen)
-                pygame.time.delay(500)  # Pausa para visualizar el movimiento
+                dibujar_laberinto(screen, laberinto2, laberinto_copia)
+                pygame.time.delay(50)  # Pausa para visualizar el movimiento
+
 
             # Imprimir el árbol después de haber encontrado la meta
             imprimir_arbol(parent, inicio, fin)
@@ -100,14 +108,19 @@ def bfs_laberinto(screen):
 
         for neighbor in obtener_vecinos(current, laberinto):
             if neighbor not in visited:
+                laberinto2[current[0]][current[1]] = 'v'
                 queue.append(neighbor)
                 visited.add(neighbor)
                 parent[neighbor] = current
 
+                laberinto_copia[neighbor[0]][neighbor[1]] = 1
+                for vecino in obtener_vecinos(neighbor, laberinto):
+                    laberinto_copia[vecino[0]][vecino[1]] = 1
                 # Mover automáticamente el punto amarillo al mismo tiempo que se descubre el camino
                 posicion_x, posicion_y = neighbor[1] * 40, neighbor[0] * 40
-                dibujar_laberinto(screen)
-                pygame.time.delay(500)  # Pausa para visualizar el movimiento
+
+                dibujar_laberinto(screen, laberinto, laberinto_copia)
+                pygame.time.delay(200)  # Pausa para controlar la velocidad del movimiento
 
     # Imprimir el árbol y el camino más corto si no se alcanzó la meta
     imprimir_arbol(parent, inicio, fin)
@@ -127,8 +140,8 @@ def obtener_vecinos(posicion, laberinto):
     x, y = posicion
     vecinos = []
 
-    # Verificar arriba, abajo, izquierda y derecha, excluyendo 0 (paredes)
-    movimientos = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    # Verificar arriba, abajo, izquierda, derecha y posición actual, excluyendo 0 (paredes)
+    movimientos = [(0, -1), (0, 1), (-1, 0), (1, 0), (0, 0)]
     for dx, dy in movimientos:
         nx, ny = x + dx, y + dy
         if 0 <= nx < len(laberinto) and 0 <= ny < len(laberinto[0]) and laberinto[nx][ny] != 0:
@@ -147,13 +160,12 @@ def imprimir_arbol(parent, inicio, fin):
 
     print("\nÁrbol de pasos del algoritmo BFS:")
     for paso in path:
-        print(f"Nodo: {paso}, Padre: {parent[paso]}")
+        print(f"Hijo: {paso}, Padre: {parent[paso]}")
     print("Fin del árbol de pasos del algoritmo BFS.")
 
-# Resto del código...
 
 def main():
-    global laberinto, parent  # Agrega 'parent' aquí
+    global laberinto, parent
     pygame.init()
     screen = pygame.display.set_mode((ANCHO, ALTO))
     pygame.display.set_caption("Laberinto")
@@ -162,8 +174,11 @@ def main():
 
     # Encuentra el camino utilizando BFS
     laberinto = cargar_laberinto_desde_archivo("laberinto.txt")
+    laberinto_copia = [[0] * len(laberinto[0]) for _ in range(len(laberinto))]
+
+    # Encuentra el camino utilizando BFS
     encontrar_coordenadas(laberinto)
-    llego_a_la_meta = bfs_laberinto(screen)
+    llego_a_la_meta = bfs_laberinto(screen, laberinto, laberinto_copia)
 
     # Bucle principal del juego
     while True:
@@ -173,7 +188,7 @@ def main():
                 sys.exit()
 
         # Dibujar el laberinto y el punto amarillo en la nueva posición
-        dibujar_laberinto(screen)
+        dibujar_laberinto(screen, laberinto, laberinto_copia)
 
         pygame.time.delay(100)  # Pausa para controlar la velocidad del movimiento
 
@@ -182,4 +197,10 @@ def main():
             sys.exit()
 
 if __name__ == "__main__":
+
+    screen = pygame.display.set_mode((ANCHO, ALTO))
+    pygame.display.set_caption("Laberinto")
+
+    reloj = pygame.time.Clock()
+
     main()
