@@ -1,5 +1,6 @@
 import pygame
 import sys
+from collections import deque
 import time
 
 # Dimensiones del laberinto (ancho y alto)
