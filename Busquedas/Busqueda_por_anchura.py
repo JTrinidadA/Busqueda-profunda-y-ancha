@@ -50,17 +50,23 @@ def dibujar_laberinto(screen, laberinto, laberinto_copia):
                 pygame.draw.rect(screen, BLANCO, (columna * 40, fila * 40, 40, 40))
             elif (laberinto[fila][columna] == 'v'):
                 pygame.draw.circle(screen, VERDE, (columna * 40+20, fila * 40+20),radius=15)
+            elif laberinto[fila][columna] == 0:
+                pygame.draw.rect(screen, NEGRO, (columna * 40, fila * 40, 40, 40))
+        ''' elif laberinto[fila][columna] == 4:
+                pygame.draw.rect(screen, "greenyellow", (columna * 40, fila * 40, 40, 40))
+            elif laberinto[fila][columna] == 5:
+                pygame.draw.rect(screen, "orange", (columna * 40, fila * 40, 40, 40))'''
         # Dibujar la entrada (azul)
     pygame.draw.rect(screen, AZUL, (inicio[1] * 40, inicio[0] * 40, 40, 40))
 
     # Dibujar la salida (rojo)
     pygame.draw.rect(screen, ROJO, (fin[1] * 40, fin[0] * 40, 40, 40))
 
-    for fila in range(len(laberinto)):
+    '''for fila in range(len(laberinto)):
         for columna in range(len(laberinto[0])):
             if laberinto_copia[fila][columna] == 0:
                 pygame.draw.rect(screen, NEGRO, (columna * 40, fila * 40, 40, 40))
-
+'''
         # Dibujar el punto amarillo en la posición actual
     pygame.draw.rect(screen, AMARILLO, (posicion_x, posicion_y, 40, 40))
 
@@ -98,7 +104,7 @@ def bfs_laberinto(screen, laberinto, laberinto_copia):
 
 
             # Imprimir el árbol después de haber encontrado la meta
-            imprimir_arbol(parent, inicio, fin)
+            imprimir_arbol_camino_y_movimientos(parent, inicio, fin)
 
             # Imprimir el camino más corto en la terminal
             camino_corto = obtener_camino_corto(parent, inicio, fin)
@@ -107,7 +113,9 @@ def bfs_laberinto(screen, laberinto, laberinto_copia):
             return True  # Llegó a la meta
 
         for neighbor in obtener_vecinos(current, laberinto):
-            if neighbor not in visited:
+            if neighbor in visited:
+                laberinto2[current[0]][current[1]] = 'v'
+            elif neighbor not in visited:
                 laberinto2[current[0]][current[1]] = 'v'
                 queue.append(neighbor)
                 visited.add(neighbor)
@@ -123,7 +131,7 @@ def bfs_laberinto(screen, laberinto, laberinto_copia):
                 pygame.time.delay(200)  # Pausa para controlar la velocidad del movimiento
 
     # Imprimir el árbol y el camino más corto si no se alcanzó la meta
-    imprimir_arbol(parent, inicio, fin)
+    imprimir_arbol_camino_y_movimientos(parent, inicio, fin)
     camino_corto = obtener_camino_corto(parent, inicio, fin)
     print("Camino más corto:", camino_corto)
     return False  # No llegó a la meta
@@ -140,8 +148,8 @@ def obtener_vecinos(posicion, laberinto):
     x, y = posicion
     vecinos = []
 
-    # Verificar arriba, abajo, izquierda, derecha y posición actual, excluyendo 0 (paredes)
-    movimientos = [(0, -1), (0, 1), (-1, 0), (1, 0), (0, 0)]
+    # Verificar arriba, izquierda, derecha, abajo y posición actual, excluyendo 0 (paredes)
+    movimientos = [(0, -1), (-1, 0), (1, 0), (0, 1), (0, 0)]
     for dx, dy in movimientos:
         nx, ny = x + dx, y + dy
         if 0 <= nx < len(laberinto) and 0 <= ny < len(laberinto[0]) and laberinto[nx][ny] != 0:
@@ -150,20 +158,30 @@ def obtener_vecinos(posicion, laberinto):
     return vecinos
 
 
-def imprimir_arbol(parent, inicio, fin):
+def imprimir_arbol_camino_y_movimientos(padres, inicio, fin):
     current = fin
     path = []
+    visitados = set()
+
     while current != inicio:
         path.insert(0, current)
-        current = parent[current]
+        visitados.add(current)
+        current = padres[current]
+
     path.insert(0, inicio)
 
-    print("\nÁrbol de pasos del algoritmo BFS:")
-    for paso in path:
-        print(f"Hijo: {paso}, Padre: {parent[paso]}")
+    print("Árbol de pasos del algoritmo BFS:")
+    for i, nodo in enumerate(path[:-1]):
+        nivel = i + 1
+        print(f"{'    ' * i}+- Nodo: {nodo}")
+
+        nodos_siguientes = [k for k, v in padres.items() if v == nodo]
+        hijos = [hijo for hijo, padre in padres.items() if padre == nodo and hijo not in visitados and hijo not in path]
+        hijos += nodos_siguientes
+        for j, hijo in enumerate(hijos):
+            print(f"{'    ' * (i + 1)}|-- Hijo {j + 1} de nivel {nivel + 1}: {hijo}")
+
     print("Fin del árbol de pasos del algoritmo BFS.")
-
-
 def main():
     global laberinto, parent
     pygame.init()
@@ -190,7 +208,7 @@ def main():
         # Dibujar el laberinto y el punto amarillo en la nueva posición
         dibujar_laberinto(screen, laberinto, laberinto_copia)
 
-        pygame.time.delay(100)  # Pausa para controlar la velocidad del movimiento
+        pygame.time.delay(20) # Pausa para controlar la velocidad del movimiento
 
         if llego_a_la_meta:
             pygame.quit()
