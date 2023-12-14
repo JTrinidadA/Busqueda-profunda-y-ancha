@@ -3,8 +3,8 @@ import sys
 from collections import deque
 
 # Dimensiones del laberinto (ancho y alto)
-ANCHO = 600
-ALTO = 600
+#ANCHO = 600
+#ALTO = 600
 
 # Colores
 BLANCO = (255, 255, 255)
@@ -29,6 +29,11 @@ def cargar_laberinto_desde_archivo(nombre_archivo):
             row = [int(cell) for cell in line.split()]
             laberinto.append(row)
     return laberinto
+
+def tamanio_laberinto(laberinto):
+    height= len(laberinto[0])*40
+    weight = len(laberinto)*40
+    return (height, weight)
 
 def encontrar_coordenadas(laberinto):
     for i, fila in enumerate(laberinto):
@@ -182,16 +187,17 @@ def imprimir_arbol_camino_y_movimientos(padres, inicio, fin):
             print(f"{'    ' * (i + 1)}|-- Hijo {j + 1} de nivel {nivel + 1}: {hijo}")
 
     print("Fin del árbol de pasos del algoritmo BFS.")
-def main():
-    global laberinto, parent
+def main(laberinto):
+    global parent
+    #laberinto = cargar_laberinto_desde_archivo("laberintos/laberinto.txt")
+    print(laberinto)
+    size = tamanio_laberinto(laberinto)
     pygame.init()
-    screen = pygame.display.set_mode((ANCHO, ALTO))
+    screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Laberinto")
-
     reloj = pygame.time.Clock()
 
     # Encuentra el camino utilizando BFS
-    laberinto = cargar_laberinto_desde_archivo("laberinto.txt")
     laberinto_copia = [[0] * len(laberinto[0]) for _ in range(len(laberinto))]
 
     # Encuentra el camino utilizando BFS
@@ -215,10 +221,4 @@ def main():
             sys.exit()
 
 if __name__ == "__main__":
-
-    screen = pygame.display.set_mode((ANCHO, ALTO))
-    pygame.display.set_caption("Laberinto")
-
-    reloj = pygame.time.Clock()
-
-    main()
+    main(laberinto)
