@@ -22,14 +22,14 @@ fin = (0, 0)
 # Coordenadas iniciales del punto amarillo (entrada)
 posicion_x, posicion_y = inicio[1] * 40, inicio[0] * 40
 
-def cargar_laberinto_desde_archivo(nombre_archivo):
+'''def cargar_laberinto_desde_archivo(nombre_archivo):
     laberinto = []
     with open(nombre_archivo, 'r') as file:
         for line in file:
             row = [int(cell) for cell in line.split()]
             laberinto.append(row)
     return laberinto
-
+'''
 def tamanio_laberinto(laberinto):
     height= len(laberinto[0])*40
     weight = len(laberinto)*40

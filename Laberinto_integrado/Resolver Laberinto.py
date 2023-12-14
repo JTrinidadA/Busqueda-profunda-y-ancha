@@ -2,6 +2,7 @@ import pygame
 from tkinter import Tk, filedialog
 import os
 import Anchura
+import manual
 
 # Dimensiones del laberinto (ancho y alto)
 ANCHO = 600
@@ -138,7 +139,7 @@ def handle_events():
                 breadth_function(laberinto)
             elif manual_button_rect.collidepoint(event.pos) and state == 1:
                 state = 2  # Cambiar al siguiente estado después de presionar el botón "Manual"
-                manual_function()
+                manual_function(laberinto)
 
 def cargar_laberinto_desde_archivo(nombre_archivo):
     laberinto = []
@@ -158,8 +159,8 @@ def depth_function():
     print("Función Profundidad")
 def breadth_function(laberinto):
     Anchura.main(laberinto)
-def manual_function():
-    print("Función Manual")
+def manual_function(laberinto):
+    manual.main(laberinto)
 
 # Bucle principal
 clock = pygame.time.Clock()

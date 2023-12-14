@@ -77,7 +77,7 @@ while True:
     screen.fill(BLACK)
 
     # Display title
-    display_text("Los +putu2", title_font, WHITE, WINDOW_SIZE[0] // 2, 50)
+    display_text("Los Nalgones", title_font, WHITE, WINDOW_SIZE[0] // 2, 50)
 
     # Check if the mouse is over an option and change its color
     for text_rect, option_num, option_text in option_rects:
