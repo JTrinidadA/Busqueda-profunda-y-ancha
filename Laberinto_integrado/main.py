@@ -9,7 +9,7 @@ pygame.init()
 # Set up the screen
 WINDOW_SIZE = (1400, 750)
 screen = pygame.display.set_mode(WINDOW_SIZE)
-pygame.display.set_caption("Los Nalgones")
+pygame.display.set_caption("Practica 2")
 
 # Define colors
 WHITE = (255, 255, 255)
