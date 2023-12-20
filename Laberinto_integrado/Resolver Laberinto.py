@@ -3,7 +3,7 @@ from tkinter import Tk, filedialog
 import os
 import Anchura
 import manual
-import Profundidad
+
 
 # Dimensiones del laberinto (ancho y alto)
 ANCHO = 600
