@@ -46,9 +46,10 @@ def dibujar_laberinto(screen, laberinto, ancho_celda, alto_celda, laberinto_copi
                 pygame.draw.rect(screen, AGUA, (columna * ancho_celda, fila * alto_celda, ancho_celda, alto_celda))
             elif laberinto[fila][columna] == 7:
                 pygame.draw.rect(screen, PIEDRA, (columna * ancho_celda, fila * alto_celda, ancho_celda, alto_celda))
+
+
     pygame.draw.rect(screen, AZUL, (inicio[0] * ancho_celda, inicio[1] * alto_celda, ancho_celda, alto_celda))
 
-    # Dibujar la salida (rojo) en la posición de fin
     pygame.draw.rect(screen, ROJO, (fin[0] * ancho_celda, fin[1] * alto_celda, ancho_celda, alto_celda))
 
     for fila in range(len(laberinto)):
@@ -66,7 +67,7 @@ def marcar_celdas_vecinas(laberinto_copia, fila, columna):
     laberinto_copia[fila][columna] = 1
 
     # Marcar las celdas vecinas en todas las direcciones, con un alcance de dos celdas
-    for i in range(-2, 3):
+    for i in range(-1, 2):
         for j in range(-2, 3):
             if 0 <= fila + i < len(laberinto_copia) and 0 <= columna + j < len(laberinto_copia[0]):
                 laberinto_copia[fila + i][columna + j] = 1

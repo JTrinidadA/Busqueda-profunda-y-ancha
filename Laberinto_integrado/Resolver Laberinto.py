@@ -3,6 +3,7 @@ from tkinter import Tk, filedialog
 import os
 import Anchura
 import manual
+import Profundidad
 
 # Dimensiones del laberinto (ancho y alto)
 ANCHO = 600
@@ -148,6 +149,7 @@ def cargar_laberinto_desde_archivo(nombre_archivo):
             row = [int(cell) for cell in line.split()]
             laberinto.append(row)
     return laberinto
+
 def open_file_dialog():
     global selected_file, laberinto
     # Abrir el diálogo de archivos en la carpeta "/laberintos"
@@ -156,7 +158,8 @@ def open_file_dialog():
     laberinto = cargar_laberinto_desde_archivo(selected_file)
 
 def depth_function():
-    print("Función Profundidad")
+    #Profundidad.py
+    print("profundidad")
 def breadth_function(laberinto):
     Anchura.main(laberinto)
 def manual_function(laberinto):
@@ -165,8 +168,6 @@ def manual_function(laberinto):
 # Bucle principal
 clock = pygame.time.Clock()
 running = True
-# ...
-# ... (código anterior)
 
 while running:
     handle_events()

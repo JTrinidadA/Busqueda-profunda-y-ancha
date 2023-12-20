@@ -112,3 +112,51 @@ Camino cerrado
 Opciones disponibles: [(40, 0)]
 Camino cerrado
 560,40
+Posición actual: (1, 0)
+Opciones disponibles: [(40, 0)]
+Camino abierto: True
+Posición actual: (1, 1)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 2)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 3)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 4)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (2, 4)
+Opciones disponibles: [(40, 0)]
+Camino abierto: True
+Posición actual: (2, 5)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (2, 6)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 0)
+Opciones disponibles: [(40, 0)]
+Camino abierto: True
+Posición actual: (1, 1)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 2)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 3)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (1, 4)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (2, 4)
+Opciones disponibles: [(40, 0)]
+Camino abierto: True
+Posición actual: (2, 5)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True
+Posición actual: (2, 6)
+Opciones disponibles: [(0, 40)]
+Camino abierto: True

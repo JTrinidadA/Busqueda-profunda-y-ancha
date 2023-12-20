@@ -140,6 +140,7 @@ def bfs_laberinto(screen, laberinto, laberinto_copia):
     camino_corto = obtener_camino_corto(parent, inicio, fin)
     print("Camino más corto:", camino_corto)
     return False  # No llegó a la meta
+
 def obtener_camino(parent, inicio, fin):
     current = fin
     path = []
@@ -187,6 +188,7 @@ def imprimir_arbol_camino_y_movimientos(padres, inicio, fin):
             print(f"{'    ' * (i + 1)}|-- Hijo {j + 1} de nivel {nivel + 1}: {hijo}")
 
     print("Fin del árbol de pasos del algoritmo BFS.")
+
 def main(laberinto):
     global parent
     #laberinto = cargar_laberinto_desde_archivo("laberintos/laberinto.txt")
